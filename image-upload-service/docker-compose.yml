@@ -1,0 +1,22 @@
+version: '3.5'
+
+services: 
+    image-upload-service:
+        image: sneyd321/image-upload-service
+        ports: 
+            - 8088:8088
+        volumes: 
+            - ./:/usr/src/app
+        restart: on-failure
+
+    celery:
+        image: sneyd321/celery 
+        volumes: 
+            - ./:/usr/src/app
+        restart: on-failure
+
+   
+          
+
+ 
+    

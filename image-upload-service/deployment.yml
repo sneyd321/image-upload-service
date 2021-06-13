@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-upload-service
+spec:
+  selector:
+    matchLabels:
+      run: image-upload-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: image-upload-service
+    spec:
+      containers:
+      - name: image-upload-service
+        image: sneyd321/image-upload
+        ports:
+        - containerPort: 8088
+
+  
+        
+      imagePullSecrets:
+        - name: key
