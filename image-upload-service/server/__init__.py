@@ -7,8 +7,8 @@ app = Flask(__name__)
 
 from kazoo.client import KazooClient, KazooState
 
-zk = KazooClient(hosts='host.docker.internal:2181')
-zk.start()
+zk = KazooClient()
+
 
 
 @app.route("/Health")
@@ -16,15 +16,25 @@ def health_check():
     return Response(status=200)
 
 
-#c = Celery("server", broker='redis://redis-service.default.svc.cluster.local:6379', backend='redis://redis-service.default.svc.cluster.local:6379')
-#app.config['CELERY_BROKER_URL'] = 'redis://redis-service.default.svc.cluster.local:6379/0'
-#app.config['CELERY_RESULT_BACKEND'] = 'redis://redis-service.default.svc.cluster.local:6379/0'
 
-app.config['CELERY_BROKER_URL'] = 'redis://host.docker.internal:6379/0'
-app.config['CELERY_RESULT_BACKEND'] = 'redis://host.docker.internal:6379/0'
+def make_celery(app, env):
+
+    if env == "prod":
+        zk.set_hosts('zookeeper.default.svc.cluster.local:2181')
+        app.config['CELERY_BROKER_URL'] = 'redis://redis-service.default.svc.cluster.local:6379/0'
+        app.config['CELERY_RESULT_BACKEND'] = 'redis://redis-service.default.svc.cluster.local:6379/0'
+
+    elif env == "dev":
+        zk.set_hosts('host.docker.internal:2181')
+        app.config['CELERY_BROKER_URL'] = 'redis://host.docker.internal:6379/0'
+        app.config['CELERY_RESULT_BACKEND'] = 'redis://host.docker.internal:6379/0'
+
+    else:
+        return None
+
+    zk.start()
 
 
-def make_celery(app):
     celery = Celery(
         app.import_name,
         backend=app.config['CELERY_RESULT_BACKEND'],
@@ -39,6 +49,7 @@ def make_celery(app):
                 return self.run(*args, **kwargs)
 
     celery.Task = ContextTask
+    celery.conf.update(app.config)
     return celery
 
 
@@ -49,5 +60,4 @@ def create_app():
     return app
 
 
-celery = make_celery(app)
-celery.conf.update(app.config)
+celery = make_celery(app, "prod")

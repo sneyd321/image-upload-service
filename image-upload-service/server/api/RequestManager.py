@@ -24,7 +24,7 @@ class RequestManager:
 
     def post(self, resource, json):
         try:
-            response = requests.post(self.service + "/" + resource, json=json)
+            response = requests.post("http://" + self.service + "/" + resource, json=json)
             return Response(response=response.text, status=response.status_code)
         except requests.exceptions.ConnectionError:
             return Response(response="Error: Service currently unavailable.", status=503)

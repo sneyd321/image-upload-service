@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: image-upload-service
-        image: sneyd321/image-upload
+        image: sneyd321/image-upload-service
         ports:
         - containerPort: 8088
 

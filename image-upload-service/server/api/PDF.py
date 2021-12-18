@@ -49,13 +49,13 @@ class OntarioLease:
 
     def getPageTwoValues(self): 
        
-        return [(22, 706, str(self.houseData["homeownerLocation"]["unitNumber"]))
-        , (111, 706, str(self.houseData["homeownerLocation"]["streetNumber"]))
-        , (201, 706,  self.houseData["homeownerLocation"]["streetName"])
-        , (526, 706, self.houseData["homeownerLocation"]["poBox"])
-        , (22, 679, self.houseData["homeownerLocation"]["city"])
-        , (272, 679, self.houseData["homeownerLocation"]["province"])
-        , (471, 679, self.houseData["homeownerLocation"]["postalCode"])
+        return [(22, 706, str(self.homeownerData["homeownerLocation"]["unitNumber"]))
+        , (111, 706, str(self.homeownerData["homeownerLocation"]["streetNumber"]))
+        , (201, 706,  self.homeownerData["homeownerLocation"]["streetName"])
+        , (526, 706, self.homeownerData["homeownerLocation"]["poBox"])
+        , (22, 679, self.homeownerData["homeownerLocation"]["city"])
+        , (272, 679, self.homeownerData["homeownerLocation"]["province"])
+        , (471, 679, self.homeownerData["homeownerLocation"]["postalCode"])
         , (22, 628, "X")
         , (22, 592, self.homeownerData["email"])
         , (22, 558, "X")
